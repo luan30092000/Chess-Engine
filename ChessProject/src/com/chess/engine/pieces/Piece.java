@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class Piece {
@@ -22,6 +23,6 @@ public abstract class Piece {
 
 
     // Because this class is abstract, each piece will have its own way of calculation legal move
-    public abstract List<Move> calculateLegalMove(final Board board);
+    public abstract Collection<Move> calculateLegalMove(final Board board);
 
 }
