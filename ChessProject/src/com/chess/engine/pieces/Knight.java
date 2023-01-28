@@ -6,9 +6,10 @@ import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
 
-import javax.lang.model.type.ArrayType;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.chess.engine.board.BoardUtils.isValidTileCoordinate;
 
 /**
  * Ex: Knife @35, legal moves are 18, 20, 25, 29, 41, 45, 50, 52
@@ -25,6 +26,11 @@ public class Knight extends Piece {
         super(piecePosition, pieceAlliance);
     }
 
+    /**
+     * Implemented knight legal move calculation
+     * @param board current board state
+     * @return return list of legal move that a specific knight can move
+     */
     @Override
     public List<Move> calculateLegalMove(Board board) {
 
@@ -34,7 +40,7 @@ public class Knight extends Piece {
 
         for (final int currentCandidate : CANDIDATE_MOVE_COORDINATE) {
             candidateDestinationCoordinate = this.piecePosition + currentCandidate;
-            if (candidateDestinationCoordinate > 63 || candidateDestinationCoordinate < 0) {    // If candidate is out of chess board bound todo: need new algo
+            if (isValidTileCoordinate(candidateDestinationCoordinate)/*candidateDestinationCoordinate > 63 || candidateDestinationCoordinate < 0*/) {    // If candidate is out of chess board bound todo: need new algo
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);    // Get the tile location
                 if (!candidateDestinationTile.isTileOccupied()) {   // If tile is not occupied
                     legalMoves.add(new Move());
@@ -48,7 +54,6 @@ public class Knight extends Piece {
                 }
             }
         }
-
         return ImmutableList.copyOf(legalMoves);
     }
 }
