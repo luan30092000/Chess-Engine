@@ -12,17 +12,17 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Same implementing as Bishop, refer to bishop for more detail
+ * Mostly a union of bishop and rook
  */
-public class Rock extends Piece {
+public class Queen extends Piece{
 
-    private final static int[] CANDIDATE_MOVE_DIRECTION = {-8, -1, 1, 8};
+    private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    Rock(int piecePosition, Alliance pieceAlliance) {
+    Queen(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
-
+    @Override
     public Collection<Move> calculateLegalMove(Board board) {
         final List<Move> legalMoves = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class Rock extends Piece {
                         isEighthColumnExclusion(piecePosition, currentAdditionCandidate)) {
                     break;
                 }
-                    candidateDestinationCoordinate += currentAdditionCandidate;
+                candidateDestinationCoordinate += currentAdditionCandidate;
                 final Tile candidateDestinationTile = board.getTile(currentAdditionCandidate);
                 if (!candidateDestinationTile.isTileOccupied()) {
                     legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
@@ -51,10 +51,18 @@ public class Rock extends Piece {
     }
 
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return BoardUtils.FIRST_COLUMN[piecePosition] && (currentCandidateDirection == -1);
+        return (BoardUtils.FIRST_COLUMN[piecePosition] &&
+                (currentCandidateDirection == -9 ||
+                        currentCandidateDirection == -1 ||
+                        currentCandidateDirection == 7));
     }
 
     private static boolean isEighthColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return BoardUtils.EIGHTH_COLUMN[piecePosition] && (currentCandidateDirection == 1);
+        return (BoardUtils.EIGHTH_COLUMN[piecePosition] &&
+                (currentCandidateDirection == -7 ||
+                        currentCandidateDirection == 1 ||
+                        currentCandidateDirection == 9));
     }
+
+
 }
