@@ -12,35 +12,29 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Addition variable -9, -7, 7, 9 to calculate legal move
+ * Same implementing as Bishop, refer to bishop for more detail
  */
-public class Bishop extends Piece{
+public class Rock extends Piece {
 
-    private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -7, 7, 9};
+    private final static int[] CANDIDATE_MOVE_DIRECTION = {-8, -1, 1, 8};
 
-    Bishop(int piecePosition, Alliance pieceAlliance) {
+    Rock(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
-    /**
-     * Implemented knight legal move calculation
-     * Depth-First Check CANDIDATE_MOVE_COORDINATE
-     * Bishop is long range unit, use while until out of range, with exceptional
-     * @param board current board state
-     * @return collection(set) of legal move for this specified bishop
-     */
-    @Override
+
     public Collection<Move> calculateLegalMove(Board board) {
         final List<Move> legalMoves = new ArrayList<>();
+
         for (final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
-            int candidateDestinationCoordinate = this.piecePosition;
-            while(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
-                if(isFirstColumnExclusion(this.piecePosition, currentAdditionCandidate) ||
-                        isEighthColumnExclusion(this.piecePosition, currentAdditionCandidate)) {
+            int candidateDestinationCoordinate = piecePosition;
+            while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(piecePosition, currentAdditionCandidate) ||  // Edge cases
+                        isEighthColumnExclusion(piecePosition, currentAdditionCandidate)) {
                     break;
                 }
-                candidateDestinationCoordinate += currentAdditionCandidate;
-                final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
+                    candidateDestinationCoordinate += currentAdditionCandidate;
+                final Tile candidateDestinationTile = board.getTile(currentAdditionCandidate);
                 if (!candidateDestinationTile.isTileOccupied()) {
                     legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
@@ -49,7 +43,7 @@ public class Bishop extends Piece{
                     if (this.pieceAlliance != pieceAlliance) {
                         legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
-                    break; // As if there is a occupied tile on the specific CANDIDATE_MOVE_DIRECTION, break the loop, move to next direction
+                    break;
                 }
             }
         }
@@ -57,10 +51,10 @@ public class Bishop extends Piece{
     }
 
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return (BoardUtils.FIRST_COLUMN[piecePosition] && (currentCandidateDirection == -9 || currentCandidateDirection == 7));
+        return BoardUtils.FIRST_COLUMN[piecePosition] && (currentCandidateDirection == -1);
     }
 
     private static boolean isEighthColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return (BoardUtils.EIGHTH_COLUMN[piecePosition] && (currentCandidateDirection == -7 || currentCandidateDirection == 9));
+        return BoardUtils.EIGHTH_COLUMN[piecePosition] && (currentCandidateDirection == 1);
     }
 }
