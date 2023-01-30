@@ -64,7 +64,8 @@ public class Knight extends Piece {
     //There are some exceptional case for knight when it's on edge of the board
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidate) {
         return (BoardUtils.FIRST_COLUMN[piecePosition] &&
-                ((currentCandidate == -17) || (currentCandidate == -10) || (currentCandidate == 6) || (currentCandidate == 15)));
+                ((currentCandidate == -17) || (currentCandidate == -10) ||
+                        (currentCandidate == 6) || (currentCandidate == 15)));
     }
 
     private static boolean isSecondColumnExclusion(final int piecePosition, final int currentCandidate) {
