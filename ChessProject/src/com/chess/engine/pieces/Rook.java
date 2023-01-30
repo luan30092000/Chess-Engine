@@ -18,7 +18,7 @@ public class Rook extends Piece {
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-8, -1, 1, 8};
 
-    Rook(int piecePosition, Alliance pieceAlliance) {
+    Rook(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 

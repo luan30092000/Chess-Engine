@@ -18,7 +18,7 @@ public class Bishop extends Piece{
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -7, 7, 9};
 
-    Bishop(int piecePosition, Alliance pieceAlliance) {
+    Bishop(final int piecePosition,final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
