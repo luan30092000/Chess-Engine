@@ -18,8 +18,8 @@ public class Rook extends Piece {
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-8, -1, 1, 8};
 
-    Rook(final int piecePosition, final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Rook(final Alliance pieceAlliance, final int piecePosition) {
+        super(pieceAlliance, piecePosition);
     }
 
 
@@ -33,17 +33,19 @@ public class Rook extends Piece {
                         isEighthColumnExclusion(piecePosition, currentAdditionCandidate)) {
                     break;
                 }
-                    candidateDestinationCoordinate += currentAdditionCandidate;
-                final Tile candidateDestinationTile = board.getTile(currentAdditionCandidate);
-                if (!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
-                } else {
-                    final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                    final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                    if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                candidateDestinationCoordinate += currentAdditionCandidate;
+                if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                    final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
+                    if (!candidateDestinationTile.isTileOccupied()) {
+                        legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                    } else {
+                        final Piece pieceAtDestination = candidateDestinationTile.getPiece();
+                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
+                        if (this.pieceAlliance != pieceAlliance) {
+                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -56,5 +58,10 @@ public class Rook extends Piece {
 
     private static boolean isEighthColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
         return BoardUtils.EIGHTH_COLUMN[piecePosition] && (currentCandidateDirection == 1);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.ROOK.toString();
     }
 }

@@ -18,8 +18,8 @@ public class Bishop extends Piece{
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -7, 7, 9};
 
-    Bishop(final int piecePosition,final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Bishop(final Alliance pieceAlliance, final int piecePosition) {
+        super(pieceAlliance, piecePosition);
     }
 
     /**
@@ -40,16 +40,18 @@ public class Bishop extends Piece{
                     break;
                 }
                 candidateDestinationCoordinate += currentAdditionCandidate;
-                final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
-                if (!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
-                } else {
-                    final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                    final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                    if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                if(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                    final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
+                    if (!candidateDestinationTile.isTileOccupied()) {
+                        legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                    } else {
+                        final Piece pieceAtDestination = candidateDestinationTile.getPiece();
+                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
+                        if (this.pieceAlliance != pieceAlliance) {
+                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        }
+                        break; // As if there is an occupied tile on the specific CANDIDATE_MOVE_DIRECTION, break the loop, move to next direction
                     }
-                    break; // As if there is a occupied tile on the specific CANDIDATE_MOVE_DIRECTION, break the loop, move to next direction
                 }
             }
         }
@@ -62,5 +64,10 @@ public class Bishop extends Piece{
 
     private static boolean isEighthColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
         return (BoardUtils.EIGHTH_COLUMN[piecePosition] && (currentCandidateDirection == -7 || currentCandidateDirection == 9));
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.BISHOP.toString();
     }
 }

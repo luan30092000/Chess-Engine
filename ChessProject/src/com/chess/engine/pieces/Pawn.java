@@ -20,8 +20,8 @@ public class Pawn extends Piece {
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {7, 8, 9, 16}; //8, 16 are non-attacked moves; 7, 9 are attacked move
 
-    Pawn(final int piecePosition,final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Pawn(final Alliance pieceAlliance, final int piecePosition) {
+        super(pieceAlliance, piecePosition);
     }
 
     @Override
@@ -68,5 +68,10 @@ public class Pawn extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.PAWN.toString();
     }
 }

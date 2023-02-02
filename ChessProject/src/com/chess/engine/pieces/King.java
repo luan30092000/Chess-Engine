@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class King extends Piece{
 
-    private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -8, -7, -1, 1, 7, 8, 9}
+    private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    King(final int piecePosition,final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public King(final Alliance pieceAlliance, final int piecePosition) {
+        super(pieceAlliance, piecePosition);
     }
 
     @Override
@@ -56,5 +56,10 @@ public class King extends Piece{
     private static boolean isEightColumnExclusion(final int piecePosition, final int currentCandidate) {
         return BoardUtils.EIGHTH_COLUMN[piecePosition] &&
                 (currentCandidate == -7 || currentCandidate == 1 || currentCandidate == 9);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KING.toString();
     }
 }

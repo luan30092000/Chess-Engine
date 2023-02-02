@@ -18,8 +18,8 @@ public class Queen extends Piece{
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    Queen(final int piecePosition, final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Queen(final Alliance pieceAlliance, final int piecePosition) {
+        super(pieceAlliance, piecePosition);
     }
 
     @Override
@@ -34,16 +34,18 @@ public class Queen extends Piece{
                     break;
                 }
                 candidateDestinationCoordinate += currentAdditionCandidate;
-                final Tile candidateDestinationTile = board.getTile(currentAdditionCandidate);
-                if (!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
-                } else {
-                    final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                    final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                    if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                if(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                    final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
+                    if (!candidateDestinationTile.isTileOccupied()) {
+                        legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                    } else {
+                        final Piece pieceAtDestination = candidateDestinationTile.getPiece();
+                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
+                        if (this.pieceAlliance != pieceAlliance) {
+                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -51,17 +53,22 @@ public class Queen extends Piece{
     }
 
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return (BoardUtils.FIRST_COLUMN[piecePosition] &&
+        return BoardUtils.FIRST_COLUMN[piecePosition] &&
                 (currentCandidateDirection == -9 ||
                         currentCandidateDirection == -1 ||
-                        currentCandidateDirection == 7));
+                        currentCandidateDirection == 7);
     }
 
     private static boolean isEighthColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
-        return (BoardUtils.EIGHTH_COLUMN[piecePosition] &&
+        return BoardUtils.EIGHTH_COLUMN[piecePosition] &&
                 (currentCandidateDirection == -7 ||
                         currentCandidateDirection == 1 ||
-                        currentCandidateDirection == 9));
+                        currentCandidateDirection == 9);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.QUEEN.toString();
     }
 
 

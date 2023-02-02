@@ -18,8 +18,8 @@ public class BoardUtils {
             EIGHTH_COLUMN = initColumn(7);
 
     public static final boolean[] FIRST_ROW = initRow(1),
-            SECOND_ROW = initRow(2),
-            SEVENTH_ROW = initRow(7);
+            SECOND_ROW = initRow(8),
+            SEVENTH_ROW = initRow(48);
 
     /**
      * Make bool arr of 64 element and assigned True to specific edge elements
@@ -39,11 +39,10 @@ public class BoardUtils {
     private static boolean[] initRow(int rowNumber) {
         final boolean[] table = new boolean[64];
 
-        rowNumber = NUM_TILES_PER_ROW * rowNumber;
         do {
             table[rowNumber] = true;
             rowNumber += SIDE_MOVE;
-        } while (rowNumber % NUM_TILES_PER_ROW == 0);    // End of row
+        } while (rowNumber % NUM_TILES_PER_ROW == 8);
         return table;
     }
 

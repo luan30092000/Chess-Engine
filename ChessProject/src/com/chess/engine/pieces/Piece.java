@@ -13,7 +13,7 @@ public abstract class Piece {
     //TODO more work here!!
     protected final boolean isFirstMove = false;
 
-    Piece(final int piecePosition, final Alliance pieceAlliance) {
+    public Piece(final Alliance pieceAlliance, final int piecePosition) {
         this.piecePosition = piecePosition;
         this.pieceAlliance = pieceAlliance;
     }
@@ -22,8 +22,34 @@ public abstract class Piece {
         return this.pieceAlliance;
     }
 
+    public int getPiecePosition() {
+        return this.piecePosition;
+    }
 
     // Because this class is abstract, each piece will have its own way of calculation legal move
     public abstract Collection<Move> calculateLegalMove(final Board board);
 
+    /**
+     * To print name of each piece
+     */
+    enum PieceType {
+
+        PAWN("P"),
+        KNIGHT("K"),
+        BISHOP("B"),
+        ROOK("R"),
+        KING("K"),
+        QUEEN("Q");
+
+        private String pieceName;
+
+        PieceType(final String pieceName) {
+            this.pieceName = pieceName;
+        }
+
+        @Override
+        public String toString() {
+            return this.pieceName;
+        }
+    }
 }
