@@ -2,6 +2,9 @@ package com.chess.engine.board;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.pieces.*;
+import com.chess.engine.player.BlackPlayer;
+import com.chess.engine.player.Player;
+import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
 
 import java.util.*;
@@ -17,10 +20,15 @@ public class Board {
 
     /**
      * Could have use array, but array is not immutable, List is immutable
+     * A board consists of list of tile with pieces content on it
+     * Active white/black pieces -> non-active white/black pieces
+     * White and Black players
      */
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces;    //Active pieces on board
     private final Collection<Piece> blackPieces;    //Active pieces on board
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -28,12 +36,15 @@ public class Board {
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, blackStandardLegalMoves, whiteStandardLegalMoves);
     }
 
-    @Override
     /**
      * Print board "natively"
      */
+    @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
@@ -78,8 +89,24 @@ public class Board {
         return ImmutableList.copyOf(activePieces);
     }
 
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
     public Tile getTile(final int tileCoordinate) {
-        return gameBoard.get(tileCoordinate);
+        return this.gameBoard.get(tileCoordinate);
+    }
+
+    public Player getBlackPlayer() {
+        return this.blackPlayer;
+    }
+
+    public Player getWhitePlayer() {
+        return this.whitePlayer;
     }
 
     /**
@@ -133,7 +160,6 @@ public class Board {
         return builder.build();
     }
 
-
     /**
      * Builder associates with pattern,
      * Contain boardConfig: hold initial location of all pieces
@@ -145,7 +171,7 @@ public class Board {
         Alliance nextMoveMaker;
 
         public Builder() {
-            boardConfig = new HashMap<>();
+            this.boardConfig = new HashMap<>();
         }
 
         /**

@@ -8,14 +8,16 @@ import java.util.Collection;
 
 public abstract class Piece {
 
+    protected final PieceType pieceType;
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
     //TODO more work here!!
     protected final boolean isFirstMove = false;
 
-    public Piece(final Alliance pieceAlliance, final int piecePosition) {
+    public Piece(final PieceType pieceType, final Alliance pieceAlliance, final int piecePosition) {
         this.piecePosition = piecePosition;
         this.pieceAlliance = pieceAlliance;
+        this.pieceType = pieceType;
     }
 
     public Alliance getPieceAlliance() {
@@ -29,17 +31,51 @@ public abstract class Piece {
     // Because this class is abstract, each piece will have its own way of calculation legal move
     public abstract Collection<Move> calculateLegalMove(final Board board);
 
+    public PieceType getPieceType() {
+        return this.pieceType;
+    }
+
     /**
      * To print name of each piece
      */
-    enum PieceType {
+    public enum PieceType {
 
-        PAWN("P"),
-        KNIGHT("K"),
-        BISHOP("B"),
-        ROOK("R"),
-        KING("K"),
-        QUEEN("Q");
+        PAWN("P") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KNIGHT("K") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        BISHOP("B") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        ROOK("R") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KING("K") {
+            @Override
+            public boolean isKing() {
+                return true;
+            }
+        },
+        QUEEN("Q") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        };
 
         private String pieceName;
 
@@ -51,5 +87,7 @@ public abstract class Piece {
         public String toString() {
             return this.pieceName;
         }
+
+        public abstract boolean isKing();
     }
 }
