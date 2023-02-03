@@ -48,6 +48,11 @@ public class King extends Piece{
         return legalMoves;
     }
 
+    @Override
+    public Queen movePiece(Move move) {
+        return new Queen(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
+    }
+
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidate) {
         return BoardUtils.FIRST_COLUMN[piecePosition] &&
                 (currentCandidate == -9 || currentCandidate == -1 || currentCandidate == 7);

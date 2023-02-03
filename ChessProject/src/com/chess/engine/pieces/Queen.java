@@ -52,6 +52,11 @@ public class Queen extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
+    @Override
+    public Queen movePiece(Move move) {
+        return new Queen(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
+    }
+
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidateDirection) {
         return BoardUtils.FIRST_COLUMN[piecePosition] &&
                 (currentCandidateDirection == -9 ||
