@@ -19,7 +19,11 @@ public class Queen extends Piece{
     private final static int[] CANDIDATE_MOVE_DIRECTION = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public Queen(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.QUEEN, pieceAlliance, piecePosition);
+        super(PieceType.QUEEN, pieceAlliance, piecePosition, true);
+    }
+
+    public Queen(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.QUEEN, pieceAlliance, piecePosition, isFirstMove);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class Queen extends Piece{
     }
 
     @Override
-    public Queen movePiece(Move move) {
+    public Queen makeMovePiece(Move move) {
         return new Queen(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
     }
 

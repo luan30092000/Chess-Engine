@@ -11,28 +11,26 @@ public abstract class Piece {
     protected final PieceType pieceType;
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
-    protected final boolean isFirstMove = false;
+    protected final boolean isFirstMove;
     private final int cachedHashCode;
 
     public Piece(final PieceType pieceType,
                  final Alliance pieceAlliance,
-                 final int piecePosition) {
+                 final int piecePosition,
+                 final boolean isFirstMove) {
         this.piecePosition = piecePosition;
         this.pieceAlliance = pieceAlliance;
         this.pieceType = pieceType;
-        this.cachedHashCode = computeHashCode();
+        this.isFirstMove = isFirstMove;
+        this.cachedHashCode = hashCode();
     }
 
     @Override
     public int hashCode() {
-        return this.computeHashCode();
-    }
-
-    private int computeHashCode() {
         int result = pieceType.hashCode();
         result = 31 * result + pieceAlliance.hashCode();
         result = 31 * result + piecePosition;
-        result = 31 * result + (isFirstMove ? 1 : 0);
+        result = 31 * result + (isFirstMove? 1 : 0);
         return result;
     }
 
@@ -45,10 +43,10 @@ public abstract class Piece {
             return false;
         }
         final Piece otherPiece = (Piece) other;
-        return piecePosition == otherPiece.getPiecePosition() &&
-                pieceType == otherPiece.getPieceType() &&
-                pieceAlliance == otherPiece.getPieceAlliance() &&
-                isFirstMove == otherPiece.isFirstMove();
+        return this.piecePosition == otherPiece.getPiecePosition() &&
+                this.pieceType == otherPiece.getPieceType() &&
+                this.pieceAlliance == otherPiece.getPieceAlliance() &&
+                this.isFirstMove == otherPiece.isFirstMove();
     }
 
     public Alliance getPieceAlliance() {
@@ -67,11 +65,12 @@ public abstract class Piece {
     // each piece will have its own way of calculation legal move
     public abstract Collection<Move> calculateLegalMove(final Board board);
 
-    public abstract Piece movePiece(Move move);
+    public abstract Piece makeMovePiece(Move move);
 
     public PieceType getPieceType() {
         return this.pieceType;
     }
+    
 
     /**
      * To print name of each piece
@@ -83,10 +82,17 @@ public abstract class Piece {
             public boolean isKing() {
                 return false;
             }
+
+            public boolean isRook() {
+                return false;
+            }
         },
         KNIGHT("K") {
             @Override
             public boolean isKing() {
+                return false;
+            }
+            public boolean isRook() {
                 return false;
             }
         },
@@ -95,11 +101,17 @@ public abstract class Piece {
             public boolean isKing() {
                 return false;
             }
+            public boolean isRook() {
+                return false;
+            }
         },
         ROOK("R") {
             @Override
             public boolean isKing() {
                 return false;
+            }
+            public boolean isRook() {
+                return true;
             }
         },
         KING("K") {
@@ -107,15 +119,21 @@ public abstract class Piece {
             public boolean isKing() {
                 return true;
             }
+            public boolean isRook() {
+                return false;
+            }
         },
         QUEEN("Q") {
             @Override
             public boolean isKing() {
                 return false;
             }
+            public boolean isRook() {
+                return false;
+            }
         };
 
-        private String pieceName;
+        private final String pieceName;
 
         PieceType(final String pieceName) {
             this.pieceName = pieceName;
@@ -127,5 +145,7 @@ public abstract class Piece {
         }
 
         public abstract boolean isKing();
+
+        public abstract boolean isRook();
     }
 }

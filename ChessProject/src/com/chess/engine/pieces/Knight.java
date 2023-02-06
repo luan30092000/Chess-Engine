@@ -23,7 +23,11 @@ public class Knight extends Piece {
     private final static int[] CANDIDATE_MOVE_DIRECTION = { -17, -15, -10, -6, 6, 10, 15, 17};
 
     public Knight(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.KNIGHT, pieceAlliance, piecePosition);
+        super(PieceType.KNIGHT, pieceAlliance, piecePosition, true);
+    }
+
+    public Knight(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.KNIGHT, pieceAlliance, piecePosition, isFirstMove);
     }
 
     /**
@@ -62,7 +66,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Knight movePiece(Move move) {
+    public Knight makeMovePiece(Move move) {
         return new Knight(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
     }
 

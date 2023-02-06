@@ -14,14 +14,17 @@ import java.util.List;
  * Pawn is a short distance unit
  * Have many variable such as promotion, move vertical but capture diagonal, 1 way move for black and white
  * Can only capture diagonal when tile is occupied by opponent
- * TODO cannot move if they are cover king
  */
 public class Pawn extends Piece {
 
     private final static int[] CANDIDATE_MOVE_DIRECTION = {7, 8, 9, 16}; //8, 16 are non-attacked moves; 7, 9 are attacked move
 
     public Pawn(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.PAWN, pieceAlliance, piecePosition);
+        super(PieceType.PAWN, pieceAlliance, piecePosition, true);
+    }
+
+    public Pawn(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.PAWN, pieceAlliance, piecePosition, isFirstMove);
     }
 
     @Override
@@ -29,14 +32,13 @@ public class Pawn extends Piece {
         final List<Move> legalMoves = new ArrayList<>();
 
         for (final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
-
             final int candidateDestinationCoordinate = this.piecePosition + this.pieceAlliance.getDirection() * currentAdditionCandidate;
             if (!BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) { //If out of bound (table)
                 continue;
             }
             if (currentAdditionCandidate == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {    // non-attacked move, 1 box
                 //TODO Promotion Pawn
-                legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                legalMoves.add(new Move.PawnMove(board, this, candidateDestinationCoordinate));
             } else if (candidateDestinationCoordinate == 16 && this.isFirstMove &&   // Non-attack move, 2 boxes
                     ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack()) ||
                             (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
@@ -70,8 +72,13 @@ public class Pawn extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    /**
+     * Make new pieces with same alliance and destination Coordinate
+     * @param move  to get alliance type
+     * @return  new piece(Pawn) with same alliance and new position
+     */
     @Override
-    public Pawn movePiece(Move move) {
+    public Pawn makeMovePiece(Move move) {
         return new Pawn(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
     }
 

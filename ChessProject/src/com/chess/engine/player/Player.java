@@ -6,6 +6,7 @@ import com.chess.engine.board.Move;
 import com.chess.engine.pieces.King;
 import com.chess.engine.pieces.*;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public abstract class Player {
 
-    protected Board board;
+    protected final Board board;
     protected final King playerKing;
     protected final Collection<Move> legalMoves;
     private final boolean isInCheck;
@@ -23,20 +24,30 @@ public abstract class Player {
                    final Collection<Move> opponentMoves) {
         this.board = board;
         this.playerKing = establishKing();
-        this.legalMoves = legalMoves;
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();   // Is the king under attack?
     }
 
-    private static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> opponentMoves) {
+    /**
+     * Check if TileLocation interfered OpponentLegalMove
+     * @param tileLocation tilePosition
+     * @param opponentMoves opponent moves that have to be checked
+     * @return  List of opponent move that interact with tileLocation
+     */
+    protected static Collection<Move> calculateAttacksOnTile(int tileLocation, Collection<Move> opponentMoves) {
         final List<Move> attackMoves = new ArrayList<>();
         for (final Move move : opponentMoves) {
-            if (piecePosition == move.getDestinationCoordinate()) { // Piece is in opponent move
+            if (tileLocation == move.getDestinationCoordinate()) { // Piece is in opponent move
                 attackMoves.add(move);
             }
         }
         return ImmutableList.copyOf(attackMoves);
     }
 
+    /**
+     * Used in constructor
+     * @return King piece
+     */
     private King establishKing() {
         for (final Piece piece : getActivePieces()) {
             if (piece.getPieceType().isKing()) {
@@ -45,26 +56,23 @@ public abstract class Player {
         }
         throw new RuntimeException("Board have no king Exception"); // If no king was setting up, invalid board
     }
-
     public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentsLegalMoves);
 
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
     }
 
-    //TODO implementing
-    public boolean isCheck() {
-        return false;
-    }
-
-    //TODO implementing
-    public boolean isCheckMate() {
+    public boolean isInCheck() {
         return this.isInCheck;
     }
 
-    //TODO implementing
+    public boolean isCheckMate() {
+        return this.isInCheck && !hasEscapeMove();
+    }
+
     public boolean isStaleMate() {
         return !hasEscapeMove() && !this.isInCheck;
     }
@@ -110,4 +118,5 @@ public abstract class Player {
         // Everything is in check, return pending board
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
+
 }

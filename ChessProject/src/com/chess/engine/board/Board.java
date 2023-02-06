@@ -6,6 +6,7 @@ import com.chess.engine.player.BlackPlayer;
 import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -14,7 +15,6 @@ import java.util.*;
  * Builder pattern: https://refactoring.guru/design-patterns/builder
  *                  https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java
  * List:            https://docs.oracle.com/javase/8/docs/api/java/util/List.html
- * TODO read builder topic
  */
 public class Board {
 
@@ -31,8 +31,13 @@ public class Board {
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
 
+    /**
+     * To initiate board and after each time a player make a move
+     * new board is created
+     * @param builder
+     */
     private Board(Builder builder) {
-        this.gameBoard = createGameBoard(builder);
+        this.gameBoard = createGameBoard(builder);  // Create game board with tile associated with pieces from boardConfig
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
@@ -165,6 +170,10 @@ public class Board {
         return builder.build();
     }
 
+    public Iterable<Move> getAllLegalMove() {
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    }
+
     /**
      * Builder associates with pattern,
      * Contain boardConfig: hold initial location of all pieces
@@ -174,6 +183,7 @@ public class Board {
     public static class Builder  {
         Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
@@ -181,8 +191,8 @@ public class Board {
 
         /**
          * setPiece() -> boardConfig -> createGameBoard()
-         * @param piece piece with loc
-         * @return Builder
+         * @param piece     piece that are being put into board builder to make board
+         * @return Builder  with new pieces location
          */
         public Builder setPiece(final Piece piece) {
             this.boardConfig.put(piece.getPiecePosition(), piece);
@@ -190,7 +200,7 @@ public class Board {
         }
 
         /**
-         * Set move maker
+         * Set the current moveMaker
          * @param nextMoveMaker
          * @return
          */
@@ -201,6 +211,10 @@ public class Board {
 
         public Board build() {
             return new Board(this);
+        }
+
+        public void setEnPassantPawn(Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
     }
 }

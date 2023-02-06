@@ -7,6 +7,11 @@ import com.chess.engine.player.WhitePlayer;
 
 public enum Alliance {
     WHITE {
+
+        /**
+         * Use to determine move up or down of the board array depends on alliance
+         * @return
+         */
         @Override
         public int getDirection() {
             return -1;
