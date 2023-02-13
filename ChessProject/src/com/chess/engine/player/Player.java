@@ -108,7 +108,7 @@ public abstract class Player {
         // Board after the move
         final Board transitionBoard = move.execute();
 
-        // Check if the move is gonna expose the king, lead to illegal move
+        // Check if the move is going to expose the king, lead to illegal move
         final Collection<Move> kingAttacks =  Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
                 transitionBoard.getCurrentPlayer().getLegalMoves());
         if (!kingAttacks.isEmpty()) {   // Because exposing the king to attack, this return current board with LEAVE IN CHECK STATUS

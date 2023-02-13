@@ -18,12 +18,12 @@ public abstract class Move {
 
 
     private Move(final Board board,
-                 final Piece pieceMoved,
+                 final Piece movedPiece,
                  final int destinationCoordinate) {
         this.board = board;
-        this.movedPiece = pieceMoved;
+        this.movedPiece = movedPiece;
         this.destinationCoordinate = destinationCoordinate;
-        this.isFirstMove = pieceMoved.isFirstMove();
+        this.isFirstMove = movedPiece.isFirstMove();
     }
 
     private Move(final Board board,
@@ -40,6 +40,7 @@ public abstract class Move {
         int result = 1;
         result = PRIME * result + this.destinationCoordinate;
         result = PRIME * result + this.movedPiece.hashCode();
+        result = PRIME * (isFirstMove ? 1 : 0);
         return result;
     }
 
@@ -302,7 +303,7 @@ public abstract class Move {
 
     public static final class NullMove extends Move {
         public NullMove() {
-            super(null, null, -1);
+            super(null, -1);
         }
 
         @Override
@@ -319,12 +320,16 @@ public abstract class Move {
             throw new RuntimeException("NOT instantiable!");
         }
 
+        public static Move getNullMove() {
+            return NULL_MOVE;
+        }
+
         public static Move createMove(final Board board,
                                       final int currentCoordinate,
                                       final int destinationCoordinate) {
             for (final Move move : board.getAllLegalMove()) {
-                if ((move.getCurrentCoordinate() == currentCoordinate) &&
-                        (move.getDestinationCoordinate() == destinationCoordinate)) {
+                if (move.getCurrentCoordinate() == currentCoordinate &&
+                        move.getDestinationCoordinate() == destinationCoordinate) {
                     return move;
                 }
             }

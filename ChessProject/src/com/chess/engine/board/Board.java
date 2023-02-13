@@ -24,6 +24,7 @@ public class Board {
      * Active white/black pieces -> non-active white/black pieces
      * White and Black players
      */
+    private final Map<Integer, Piece> boardConfig;
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces;    //Active pieces on board
     private final Collection<Piece> blackPieces;    //Active pieces on board
@@ -34,9 +35,12 @@ public class Board {
     /**
      * To initiate board and after each time a player make a move
      * new board is created
+     *
+     * @param boardConfig
      * @param builder
      */
-    private Board(Builder builder) {
+    private Board(Map<Integer, Piece> boardConfig, Builder builder) {
+        this.boardConfig = Collections.unmodifiableMap(builder.boardConfig);
         this.gameBoard = createGameBoard(builder);  // Create game board with tile associated with pieces from boardConfig
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
@@ -61,6 +65,10 @@ public class Board {
             }
         }
         return builder.toString();
+    }
+
+    public Piece getPiece(final int coordinate) {
+        return this.boardConfig.get(coordinate);
     }
 
     /**
@@ -181,7 +189,7 @@ public class Board {
      * Keep track of next move maker
      */
     public static class Builder  {
-        Map<Integer, Piece> boardConfig;
+        public Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
         Pawn enPassantPawn;
 
@@ -210,7 +218,7 @@ public class Board {
         }
 
         public Board build() {
-            return new Board(this);
+            return new Board(boardConfig, this);
         }
 
         public void setEnPassantPawn(Pawn enPassantPawn) {

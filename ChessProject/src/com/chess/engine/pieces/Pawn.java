@@ -40,8 +40,8 @@ public class Pawn extends Piece {
                 //TODO Promotion Pawn
                 legalMoves.add(new Move.PawnMove(board, this, candidateDestinationCoordinate));
             } else if (candidateDestinationCoordinate == 16 && this.isFirstMove &&   // Non-attack move, 2 boxes
-                    ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack()) ||
-                            (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
+                    ((BoardUtils.SEVENTH_RANK[this.piecePosition] && this.pieceAlliance.isBlack()) ||
+                            (BoardUtils.SECOND_RANK[this.piecePosition] && this.pieceAlliance.isWhite()))) {
                 final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8); // Check for the double box position
                 if (!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {

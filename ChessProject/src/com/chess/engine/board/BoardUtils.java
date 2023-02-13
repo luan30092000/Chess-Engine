@@ -1,5 +1,7 @@
 package com.chess.engine.board;
 
+import com.chess.engine.player.MoveTransition;
+
 /**
  * BoardUtils is just a utility class with static method which support the pieces
  * -> No need to initiate the class
@@ -17,14 +19,14 @@ public class BoardUtils {
             SEVENTH_COLUMN = initColumn(6),
             EIGHTH_COLUMN = initColumn(7);
 
-    public static final boolean[] FIRST_ROW = initRow(0),
-            SECOND_ROW = initRow(8),
-            THIRD_ROW = initRow(16),
-            FOURTH_ROW = initRow(24),
-            FIFTH_ROW = initRow(32),
-            SIXTH_ROW = initRow(40),
-            SEVENTH_ROW = initRow(48),
-            EIGHTH_ROW = initRow(56);
+    public static final boolean[] EIGHTH_RANK = initRow(0),
+            SEVENTH_RANK = initRow(8),
+            SIXTH_RANK = initRow(16),
+            FIFTH_RANK = initRow(24),
+            FOURTH_RANK = initRow(32),
+            THIRD_RANK = initRow(40),
+            SECOND_RANK = initRow(48),
+            FIRST_RANK = initRow(56);
 
 
     /**
