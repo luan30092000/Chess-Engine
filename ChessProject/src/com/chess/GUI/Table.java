@@ -31,9 +31,9 @@ public class Table {
     private Board chessBoard;
     private BoardDirection boardDirection;
     private Piece pieceAtSourceTile;
-    private Piece pieceAtDestinationTile;
     private Piece playerMovedPiece;
-    private final String pieceIconPath;
+    protected static final String pieceIconPath = "ImageSource/PieceIcon/";
+
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
@@ -42,7 +42,6 @@ public class Table {
     private final Color DARK_TILE_COLOUR = Color.decode("#593E1A");
 
     public Table()  {
-        this.pieceIconPath = "ImageSource/PieceIcon/";
         this.gameFrame = new JFrame("JChess");
         this.gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
@@ -186,11 +185,10 @@ public class Table {
                             final Move move = Move.MoveFactory.createMove(chessBoard, pieceAtSourceTile.getPiecePosition(), tileID);
                             final MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
                             if (transition.getMoveStatus().isDone()) {
-                                chessBoard = transition.getTransitionBoard();
+                                chessBoard = transition.getToBoard();
                                 // Add moved move to move log
                             }
                             // todo refractoring
-                            pieceAtDestinationTile = null;
                             pieceAtSourceTile = null;
                             playerMovedPiece = null;
                         }
@@ -248,7 +246,7 @@ public class Table {
             this.removeAll();
             if (board.getTile(this.tileId).isTileOccupied()) {
                 try {
-                    String address = "ImageSource/PieceIcon/" +
+                    String address = pieceIconPath +
                             board.getTile(this.tileId).getPiece().getPieceAlliance().toString().charAt(0) +
                             board.getTile(this.tileId).getPiece().toString() +
                             ".png";

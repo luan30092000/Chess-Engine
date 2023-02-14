@@ -100,23 +100,15 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(final Move move) {
-
-        if(!isMoveLegal(move)) {    // If move is illegal, return current board with ILLEGAL MOVE STATUS
-            return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        if (!isMoveLegal(move)) {
+            return new MoveTransition(this.board, this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
-
-        // Board after the move
+        // Make transition board and pending waiting to check for status
         final Board transitionBoard = move.execute();
 
-        // Check if the move is going to expose the king, lead to illegal move
-        final Collection<Move> kingAttacks =  Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
-                transitionBoard.getCurrentPlayer().getLegalMoves());
-        if (!kingAttacks.isEmpty()) {   // Because exposing the king to attack, this return current board with LEAVE IN CHECK STATUS
-            return new MoveTransition(this.board, move, MoveStatus.LEAVE_PLAYER_IN_CHECK);
-        }
-
-        // Everything is in check, return pending board
-        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+        return transitionBoard.getCurrentPlayer().getOpponent().isInCheck() ?
+                // Set status for next board, applying for next player: either incheck or normal
+                new MoveTransition(this.board, this.board, move, MoveStatus.LEAVE_PLAYER_IN_CHECK) :
+                new MoveTransition(this.board, transitionBoard, move, MoveStatus.DONE);
     }
-
 }

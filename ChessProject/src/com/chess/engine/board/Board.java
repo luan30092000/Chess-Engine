@@ -31,19 +31,20 @@ public class Board {
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
+    private final Pawn enPassantPawn;
 
     /**
      * To initiate board and after each time a player make a move
      * new board is created
      *
-     * @param boardConfig
      * @param builder
      */
-    private Board(Map<Integer, Piece> boardConfig, Builder builder) {
+    private Board(Builder builder) {
         this.boardConfig = Collections.unmodifiableMap(builder.boardConfig);
         this.gameBoard = createGameBoard(builder);  // Create game board with tile associated with pieces from boardConfig
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
@@ -111,6 +112,10 @@ public class Board {
         return this.whitePieces;
     }
 
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
+    }
+
     public Tile getTile(final int tileCoordinate) {
         return this.gameBoard.get(tileCoordinate);
     }
@@ -130,7 +135,7 @@ public class Board {
     /**
      * Create actual game board is here,
      * create tile with initial associated pieces from boardConfig (hold initial location of all pieces)
-     * @param builder
+     * @param builder to get boardConfig
      * @return List of tile with associated pieces
      */
     private static List<Tile> createGameBoard(final Builder builder) {
@@ -192,6 +197,7 @@ public class Board {
         public Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
         Pawn enPassantPawn;
+        Move transitionMove;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
@@ -217,8 +223,13 @@ public class Board {
             return this;
         }
 
+        public Builder setMoveTransition(final Move transitionMove) {
+            this.transitionMove = transitionMove;
+            return this;
+        }
+
         public Board build() {
-            return new Board(boardConfig, this);
+            return new Board(this);
         }
 
         public void setEnPassantPawn(Pawn enPassantPawn) {

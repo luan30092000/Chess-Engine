@@ -32,12 +32,14 @@ public class Pawn extends Piece {
         final List<Move> legalMoves = new ArrayList<>();
 
         for (final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
-            final int candidateDestinationCoordinate = this.piecePosition + this.pieceAlliance.getDirection() * currentAdditionCandidate;
+            final int candidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * currentAdditionCandidate);
             if (!BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) { //If out of bound (table)
                 continue;
             }
             if (currentAdditionCandidate == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {    // non-attacked move, 1 box
-                //TODO Promotion Pawn
+                if (this.pieceAlliance.isPromotionTile(candidateDestinationCoordinate)) {
+                    //legalMoves.add(new Move.PawnPromotion())
+                }
                 legalMoves.add(new Move.PawnMove(board, this, candidateDestinationCoordinate));
             } else if (candidateDestinationCoordinate == 16 && this.isFirstMove &&   // Non-attack move, 2 boxes
                     ((BoardUtils.SEVENTH_RANK[this.piecePosition] && this.pieceAlliance.isBlack()) ||
