@@ -32,8 +32,8 @@ public class Rook extends Piece {
         for (final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
             int candidateDestinationCoordinate = piecePosition;
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
-                if (isFirstColumnExclusion(piecePosition, currentAdditionCandidate) ||  // Edge cases
-                        isEighthColumnExclusion(piecePosition, currentAdditionCandidate)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate) ||  // Edge cases
+                        isEighthColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate)) {
                     break;
                 }
                 candidateDestinationCoordinate += currentAdditionCandidate;

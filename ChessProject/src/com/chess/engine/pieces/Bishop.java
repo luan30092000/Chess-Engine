@@ -40,8 +40,8 @@ public class Bishop extends Piece{
         for (final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
             int candidateDestinationCoordinate = this.piecePosition;
             while(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
-                if(isFirstColumnExclusion(this.piecePosition, currentAdditionCandidate) ||
-                        isEighthColumnExclusion(this.piecePosition, currentAdditionCandidate)) {
+                if(isFirstColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate) ||
+                        isEighthColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate)) {
                     break;
                 }
                 candidateDestinationCoordinate += currentAdditionCandidate;
