@@ -174,21 +174,19 @@ public class Table {
                 @Override
                 public void mouseClicked(final MouseEvent e) {
                     if (isRightMouseButton(e)) {
-                        // Todo refractoring clearing state
                         pieceAtSourceTile = null;
                         playerMovedPiece = null;
                     } else if (isLeftMouseButton(e)) {
                         if (pieceAtSourceTile == null) { // If this is a first click
                             pieceAtSourceTile = chessBoard.getPiece(tileID);
                             playerMovedPiece = pieceAtSourceTile;
-                        } else {    // If this is a second click
+                        } else {    // If this is a second click, calculate legal moves for new board and check for king in check, if in check, board leave with flag LEAVE IN CHECK
                             final Move move = Move.MoveFactory.createMove(chessBoard, pieceAtSourceTile.getPiecePosition(), tileID);
                             final MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
                             if (transition.getMoveStatus().isDone()) {
                                 chessBoard = transition.getToBoard();
                                 // Add moved move to move log
                             }
-                            // todo refractoring
                             pieceAtSourceTile = null;
                             playerMovedPiece = null;
                         }

@@ -47,7 +47,8 @@ public class Pawn extends Piece {
                 final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8); // Check for the double box position
                 if (!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, behindCandidateDestinationCoordinate));
+                    // TODO pawn promotion
+                    legalMoves.add(new Move.PawnJump(board, this, behindCandidateDestinationCoordinate));
                 }
             } else if (currentAdditionCandidate == 7 &&  // Capture Move
                     !((BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite()) || // Not edge case

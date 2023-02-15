@@ -308,7 +308,7 @@ public abstract class Move {
         }
     }
 
-    public static final class PawnJump extends Move {
+    public static final class PawnJump extends PawnMove {
         public PawnJump(final Board board,
                         final Piece piece,
                         final int destinationCoordinate) {

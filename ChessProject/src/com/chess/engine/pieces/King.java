@@ -33,11 +33,11 @@ public class King extends Piece{
         final List<Move> legalMoves = new ArrayList<>();
         for(final int currentAdditionCandidate : CANDIDATE_MOVE_DIRECTION) {
             final int candidateDestinationCoordinate = this.piecePosition + currentAdditionCandidate;
-            if (isFirstColumnExclusion(piecePosition, currentAdditionCandidate) ||
-                    isEightColumnExclusion(piecePosition, currentAdditionCandidate)) {
-                continue;
-            }
             if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate) ||
+                        isEightColumnExclusion(candidateDestinationCoordinate, currentAdditionCandidate)) {
+                    continue;
+                }
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
                 if (!candidateDestinationTile.isTileOccupied()) {
                     legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));    // Non-Attacked move
@@ -53,8 +53,8 @@ public class King extends Piece{
     }
 
     @Override
-    public Queen makeMovePiece(Move move) {
-        return new Queen(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
+    public King makeMovePiece(Move move) {
+        return new King(move.getMovedPiece().pieceAlliance, move.getDestinationCoordinate());
     }
 
     private static boolean isFirstColumnExclusion(final int piecePosition, final int currentCandidate) {
