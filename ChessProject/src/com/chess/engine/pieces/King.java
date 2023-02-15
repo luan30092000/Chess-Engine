@@ -44,7 +44,7 @@ public class King extends Piece{
                 } else {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     if (pieceAtDestination.pieceAlliance != this.pieceAlliance) {
-                        legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new Move.MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }

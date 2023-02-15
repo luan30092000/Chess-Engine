@@ -35,11 +35,11 @@ public class Table {
     protected static final String pieceIconPath = "ImageSource/PieceIcon/";
 
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
-    private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
-    private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
+    private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,400);
+    private final static Dimension TILE_PANEL_DIMENSION = new Dimension(30,30);
 
-    private final Color LIGHT_TILE_COLOUR = Color.decode("#FFFACD");
-    private final Color DARK_TILE_COLOUR = Color.decode("#593E1A");
+    private final Color LIGHT_TILE_COLOUR = Color.decode("#F0C380");
+    private final Color DARK_TILE_COLOUR = Color.decode("#6D3E17");
 
     public Table()  {
         this.gameFrame = new JFrame("JChess");
